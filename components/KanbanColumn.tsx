@@ -9,6 +9,7 @@ import { EditableText } from './EditableText';
 interface KanbanColumnProps {
   column: Column;
   cards: Card[];
+  availableTags: import('@/types/kanban').Tag[];
   index: number;
   onAddCard: (colId: string) => void;
   onCardClick: (card: Card) => void;
@@ -23,6 +24,7 @@ interface KanbanColumnProps {
 export function KanbanColumn({ 
   column, 
   cards, 
+  availableTags,
   index, 
   onAddCard, 
   onCardClick, 
@@ -78,6 +80,7 @@ export function KanbanColumn({
                   <KanbanCard 
                     key={card.id} 
                     card={card} 
+                    availableTags={availableTags}
                     index={idx} 
                     onClick={() => onCardClick(card)}
                     onUpdateTitle={(newTitle) => onUpdateCard({ ...card, title: newTitle })}

@@ -28,7 +28,15 @@ import { CardEditPanel } from '../CardEditPanel';
 type ViewMode = 'diaria' | 'semanal' | 'mensal';
 
 export function CalendarView() {
-  const { board, updateCard, deleteCard, isLoaded } = useKanban();
+  const { 
+    board, 
+    updateCard, 
+    deleteCard, 
+    addAvailableTag,
+    updateAvailableTag,
+    deleteAvailableTag,
+    isLoaded 
+  } = useKanban();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('mensal');
   const [editingCard, setEditingCard] = useState<Card | null>(null);
@@ -320,6 +328,17 @@ export function CalendarView() {
             setIsPanelOpen(false);
           }
         }}
+        onMove={(cardId, sourceColId, destColId) => {
+          // Calendar view doesn't handle drag and drop between columns,
+          // but CardEditPanel can change the status. We just need to update it.
+          const card = board.cards[cardId];
+          if (card) {
+            updateCard({ ...card, status: destColId });
+          }
+        }}
+        onAddAvailableTag={addAvailableTag}
+        onUpdateAvailableTag={updateAvailableTag}
+        onDeleteAvailableTag={deleteAvailableTag}
       />
     </div>
   );

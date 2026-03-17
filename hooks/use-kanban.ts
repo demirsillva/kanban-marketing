@@ -191,6 +191,45 @@ export function useKanban() {
     }));
   };
 
+  const addAvailableTag = (tag: Omit<import('@/types/kanban').Tag, 'id'>) => {
+    const newTag = { ...tag, id: `tag-${Date.now()}` };
+    setBoard(prev => ({
+      ...prev,
+      availableTags: [...(prev.availableTags || []), newTag],
+    }));
+  };
+
+  const updateAvailableTag = (updatedTag: import('@/types/kanban').Tag) => {
+    setBoard(prev => ({
+      ...prev,
+      availableTags: prev.availableTags.map(t => t.id === updatedTag.id ? updatedTag : t),
+    }));
+  };
+
+  const deleteAvailableTag = (tagId: string) => {
+    setBoard(prev => {
+      // Remove the tag from availableTags
+      const newAvailableTags = prev.availableTags.filter(t => t.id !== tagId);
+      
+      // Remove the tag from all cards that have it
+      const newCards = { ...prev.cards };
+      Object.keys(newCards).forEach(cardId => {
+        if (newCards[cardId].tags.includes(tagId)) {
+          newCards[cardId] = {
+            ...newCards[cardId],
+            tags: newCards[cardId].tags.filter(id => id !== tagId)
+          };
+        }
+      });
+
+      return {
+        ...prev,
+        availableTags: newAvailableTags,
+        cards: newCards,
+      };
+    });
+  };
+
   return {
     board,
     moveCard,
@@ -202,6 +241,9 @@ export function useKanban() {
     addColumn,
     deleteColumn,
     updateColumn,
+    addAvailableTag,
+    updateAvailableTag,
+    deleteAvailableTag,
     isLoaded
   };
 }

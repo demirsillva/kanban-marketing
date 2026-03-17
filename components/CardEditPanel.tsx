@@ -1,11 +1,12 @@
 'use client';
 
-import { Card, Priority, FunnelStage, TaskType, Channel, User, Board } from '@/types/kanban';
-import { X, Trash2, Calendar, User as UserIcon, Tag, AlignLeft, BarChart, Layers, LayoutGrid } from 'lucide-react';
+import { Card, Priority, TaskType, Channel, User, Board, Tag } from '@/types/kanban';
+import { X, Trash2, Calendar, User as UserIcon, Tag as TagIcon, AlignLeft, BarChart, LayoutGrid } from 'lucide-react';
 import { MOCK_USERS } from '@/lib/mock-data';
 import { motion, AnimatePresence } from 'motion/react';
 import { EditableText } from './EditableText';
 import { RichTextEditor } from './RichTextEditor';
+import { TagSelector } from './TagSelector';
 import { triggerSingleConfetti } from '@/lib/confetti';
 
 interface CardEditPanelProps {
@@ -17,9 +18,24 @@ interface CardEditPanelProps {
   onUpdate: (card: Card) => void;
   onDelete: (cardId: string, colId: string) => void;
   onMove: (cardId: string, sourceColId: string, destColId: string) => void;
+  onAddAvailableTag: (tag: Omit<Tag, 'id'>) => void;
+  onUpdateAvailableTag: (tag: Tag) => void;
+  onDeleteAvailableTag: (tagId: string) => void;
 }
 
-export function CardEditPanel({ card, board, isOpen, isNew = false, onClose, onUpdate, onDelete, onMove }: CardEditPanelProps) {
+export function CardEditPanel({ 
+  card, 
+  board, 
+  isOpen, 
+  isNew = false, 
+  onClose, 
+  onUpdate, 
+  onDelete, 
+  onMove,
+  onAddAvailableTag,
+  onUpdateAvailableTag,
+  onDeleteAvailableTag
+}: CardEditPanelProps) {
   if (!card) return null;
 
   const handleChange = (field: keyof Card, value: any) => {
@@ -95,23 +111,26 @@ export function CardEditPanel({ card, board, isOpen, isNew = false, onClose, onU
                       autoFocus={isNew}
                     />
                   </div>
-                  <div>
-                    <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-2 block flex items-center gap-2">
-                      <AlignLeft className="w-3 h-3" /> Descrição e Checklists
-                    </label>
-                    <RichTextEditor
-                      description={card.description}
-                      onChange={(val) => handleChange('description', val)}
-                    />
-                  </div>
-                </div>
 
-                {/* Properties Grid */}
-                <div className="grid grid-cols-2 gap-x-12 gap-y-6 pt-8 border-t border-slate-100">
-                  <div className="space-y-4">
+                  {/* Properties Grid */}
+                  <div className="grid grid-cols-2 gap-x-12 gap-y-6 pt-6 pb-6 border-y border-slate-100">
+                    <div className="col-span-2">
+                      <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-2 block flex items-center gap-2">
+                        <TagIcon className="w-3 h-3" /> Etiquetas
+                      </label>
+                      <TagSelector
+                        availableTags={board.availableTags || []}
+                        selectedTagIds={card.tags || []}
+                        onChange={(tags) => handleChange('tags', tags)}
+                        onAddAvailableTag={onAddAvailableTag}
+                        onUpdateAvailableTag={onUpdateAvailableTag}
+                        onDeleteAvailableTag={onDeleteAvailableTag}
+                      />
+                    </div>
+
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                        <UserIcon className="w-3.5 h-3.5" /> Responsável
+                      <div className="flex items-center gap-2 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+                        <UserIcon className="w-3 h-3" /> Responsável
                       </div>
                       <select
                         value={card.owner.id}
@@ -125,8 +144,20 @@ export function CardEditPanel({ card, board, isOpen, isNew = false, onClose, onU
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                        <BarChart className="w-3.5 h-3.5" /> Prioridade
+                      <div className="flex items-center gap-2 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+                        <Calendar className="w-3 h-3" /> Entrega
+                      </div>
+                      <input
+                        type="date"
+                        value={card.dueDate}
+                        onChange={(e) => handleChange('dueDate', e.target.value)}
+                        className="text-sm font-medium text-slate-700 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-indigo-500/20 py-1.5 px-3"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+                        <BarChart className="w-3 h-3" /> Prioridade
                       </div>
                       <select
                         value={card.priority}
@@ -139,24 +170,10 @@ export function CardEditPanel({ card, board, isOpen, isNew = false, onClose, onU
                         <option value="Crítica">Crítica</option>
                       </select>
                     </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                        <Calendar className="w-3.5 h-3.5" /> Entrega
-                      </div>
-                      <input
-                        type="date"
-                        value={card.dueDate}
-                        onChange={(e) => handleChange('dueDate', e.target.value)}
-                        className="text-sm font-medium text-slate-700 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-indigo-500/20 py-1.5 px-3"
-                      />
-                    </div>
 
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                        <LayoutGrid className="w-3.5 h-3.5" /> Coluna
+                      <div className="flex items-center gap-2 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
+                        <LayoutGrid className="w-3 h-3" /> Coluna
                       </div>
                       <select
                         value={card.status}
@@ -168,23 +185,20 @@ export function CardEditPanel({ card, board, isOpen, isNew = false, onClose, onU
                         ))}
                       </select>
                     </div>
+                  </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                        <Layers className="w-3.5 h-3.5" /> Estágio
-                      </div>
-                      <select
-                        value={card.funnelStage}
-                        onChange={(e) => handleChange('funnelStage', e.target.value as FunnelStage)}
-                        className="text-sm font-medium text-slate-700 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-indigo-500/20 py-1.5 px-3"
-                      >
-                        <option value="Topo">Topo</option>
-                        <option value="Meio">Meio</option>
-                        <option value="Fundo">Fundo</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-2 block flex items-center gap-2">
+                      <AlignLeft className="w-3 h-3" /> Descrição e Checklists
+                    </label>
+                    <RichTextEditor
+                      description={card.description}
+                      onChange={(val) => handleChange('description', val)}
+                    />
                   </div>
                 </div>
+
+
               </div>
 
               <div className="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3">

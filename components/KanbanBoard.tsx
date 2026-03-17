@@ -25,6 +25,9 @@ export function KanbanBoard() {
     addColumn,
     deleteColumn,
     updateColumn,
+    addAvailableTag,
+    updateAvailableTag,
+    deleteAvailableTag,
     isLoaded 
   } = useKanban();
   const [searchTerm, setSearchTerm] = useState('');
@@ -217,6 +220,7 @@ export function KanbanBoard() {
                       key={column.id}
                       column={column}
                       cards={cards}
+                      availableTags={board.availableTags || []}
                       index={index}
                       onAddCard={handleAddCard}
                       onCardClick={handleCardClick}
@@ -296,6 +300,9 @@ export function KanbanBoard() {
             }
           }
         }}
+        onAddAvailableTag={addAvailableTag}
+        onUpdateAvailableTag={updateAvailableTag}
+        onDeleteAvailableTag={deleteAvailableTag}
       />
       <ConfirmationModal
         isOpen={confirmModal.isOpen}

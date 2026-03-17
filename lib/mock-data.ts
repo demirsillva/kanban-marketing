@@ -7,6 +7,12 @@ export const MOCK_USERS: User[] = [
 ];
 
 export const INITIAL_DATA: Board = {
+  availableTags: [
+    { id: 'tag-1', text: 'Lançamento', colorBg: 'bg-indigo-100', colorText: 'text-indigo-700' },
+    { id: 'tag-2', text: 'Pago', colorBg: 'bg-emerald-100', colorText: 'text-emerald-700' },
+    { id: 'tag-3', text: 'Orgânico', colorBg: 'bg-amber-100', colorText: 'text-amber-700' },
+    { id: 'tag-4', text: 'Always On', colorBg: 'bg-sky-100', colorText: 'text-sky-700' },
+  ],
   cards: {
     'card-1': {
       id: 'card-1',
@@ -16,7 +22,7 @@ export const INITIAL_DATA: Board = {
       owner: MOCK_USERS[0],
       priority: 'Crítica',
       dueDate: new Date().toISOString().split('T')[0], // Hoje
-      tags: ['Lançamento', 'Pago'],
+      tags: ['tag-1', 'tag-2'],
       funnelStage: 'Fundo',
       effort: 'G',
       description: 'Configurar conjuntos de anúncios para o público de remarketing.',
@@ -30,7 +36,7 @@ export const INITIAL_DATA: Board = {
       owner: MOCK_USERS[1],
       priority: 'Média',
       dueDate: '2026-03-25',
-      tags: ['Orgânico', 'Always On'],
+      tags: ['tag-3', 'tag-4'],
       funnelStage: 'Topo',
       effort: 'M',
       description: 'Criar artes no Canva e legenda focada em engajamento.',
@@ -44,7 +50,7 @@ export const INITIAL_DATA: Board = {
       owner: MOCK_USERS[2],
       priority: 'Alta',
       dueDate: '2026-03-20',
-      tags: ['Lançamento'],
+      tags: ['tag-1'],
       funnelStage: 'Meio',
       effort: 'G',
       description: 'Desenvolver a LP de captura para o evento ao vivo.',
@@ -58,7 +64,7 @@ export const INITIAL_DATA: Board = {
       owner: MOCK_USERS[0],
       priority: 'Baixa',
       dueDate: '2026-03-18',
-      tags: ['Always On'],
+      tags: ['tag-4'],
       funnelStage: 'Meio',
       effort: 'P',
       description: 'Redigir o conteúdo da news e programar o envio.',
@@ -94,3 +100,101 @@ export const INITIAL_DATA: Board = {
   },
   columnOrder: ['col-1', 'col-2', 'col-3', 'col-4', 'col-5'],
 };
+
+import { ProjectsData } from '@/types/kanban';
+
+export const INITIAL_PROJECTS_DATA: ProjectsData = {
+  folderOrder: ['folder-1', 'folder-2', 'folder-3', 'folder-4'],
+  folders: {
+    'folder-1': {
+      id: 'folder-1',
+      name: 'Campanhas de Marketing',
+      description: 'Campanhas pagas e orgânicas em múltiplos canais.',
+      icon: 'Megaphone',
+      color: 'indigo',
+      projectIds: ['proj-1', 'proj-2'],
+    },
+    'folder-2': {
+      id: 'folder-2',
+      name: 'Eventos',
+      description: 'Planejamento e execução de eventos presenciais e online.',
+      icon: 'CalendarDays',
+      color: 'violet',
+      projectIds: ['proj-3'],
+    },
+    'folder-3': {
+      id: 'folder-3',
+      name: 'Redes Sociais',
+      description: 'Estratégia e produção de conteúdo para redes sociais.',
+      icon: 'Share2',
+      color: 'rose',
+      projectIds: ['proj-4'],
+    },
+    'folder-4': {
+      id: 'folder-4',
+      name: 'Conteúdo & Blog',
+      description: 'Artigos, SEO e materiais educativos.',
+      icon: 'BookOpen',
+      color: 'amber',
+      projectIds: [],
+    },
+  },
+  projects: {
+    'proj-1': {
+      id: 'proj-1',
+      name: 'Black Friday 2026',
+      description: 'Campanha integrada para Black Friday nos canais pagos e e-mail.',
+      status: 'Ativo',
+      dueDate: '2026-11-28',
+      folderId: 'folder-1',
+      tasks: [
+        { id: 't1', title: 'Definir calendário de ações', completed: true },
+        { id: 't2', title: 'Criar criativos para Facebook Ads', completed: true },
+        { id: 't3', title: 'Configurar campanhas no Google Ads', completed: false },
+        { id: 't4', title: 'Preparar fluxo de e-mail marketing', completed: false },
+        { id: 't5', title: 'Revisão final dos anúncios', completed: false },
+      ],
+    },
+    'proj-2': {
+      id: 'proj-2',
+      name: 'Lançamento Produto X',
+      description: 'Estratégia de topo, meio e fundo de funil para o novo produto.',
+      status: 'Ativo',
+      dueDate: '2026-05-15',
+      folderId: 'folder-1',
+      tasks: [
+        { id: 't6', title: 'Workshop de posicionamento', completed: true },
+        { id: 't7', title: 'Produção da landing page', completed: false },
+        { id: 't8', title: 'Campanha de pré-lançamento', completed: false },
+      ],
+    },
+    'proj-3': {
+      id: 'proj-3',
+      name: 'Webinar de Marketing Digital',
+      description: 'Evento online com especialistas do mercado.',
+      status: 'Ativo',
+      dueDate: '2026-04-10',
+      folderId: 'folder-2',
+      tasks: [
+        { id: 't9', title: 'Confirmar palestrantes', completed: true },
+        { id: 't10', title: 'Criar página de inscrição', completed: true },
+        { id: 't11', title: 'Divulgar nas redes sociais', completed: false },
+        { id: 't12', title: 'Enviar e-mails de lembrete', completed: false },
+      ],
+    },
+    'proj-4': {
+      id: 'proj-4',
+      name: 'Calendário Editorial Q2',
+      description: 'Planejamento de conteúdo para Instagram, LinkedIn e TikTok.',
+      status: 'Ativo',
+      dueDate: '2026-06-30',
+      folderId: 'folder-3',
+      tasks: [
+        { id: 't13', title: 'Mapeamento de datas comemorativas', completed: true },
+        { id: 't14', title: 'Definir pautas mensais', completed: false },
+        { id: 't15', title: 'Produção de 30 posts para Instagram', completed: false },
+      ],
+    },
+  },
+};
+

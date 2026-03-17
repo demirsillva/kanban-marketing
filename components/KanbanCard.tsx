@@ -1,6 +1,6 @@
 'use client';
 
-import { Card as CardType } from '@/types/kanban';
+import { Card as CardType, Tag as TagType } from '@/types/kanban';
 import { Draggable } from '@hello-pangea/dnd';
 import { Calendar, User, Tag, MoreHorizontal } from 'lucide-react';
 import Image from 'next/image';
@@ -11,6 +11,7 @@ import { QuickActions } from './QuickActions';
 
 interface KanbanCardProps {
   card: CardType;
+  availableTags: TagType[];
   index: number;
   onClick: () => void;
   onUpdateTitle: (newTitle: string) => void;
@@ -32,7 +33,9 @@ const funnelColors = {
   Fundo: 'border-purple-200 text-purple-600',
 };
 
-export function KanbanCard({ card, index, onClick, onUpdateTitle, onDelete, onDuplicate, onArchive }: KanbanCardProps) {
+export function KanbanCard({ card, availableTags, index, onClick, onUpdateTitle, onDelete, onDuplicate, onArchive }: KanbanCardProps) {
+  const cardTags = (card.tags || []).map(tagId => availableTags.find(t => t.id === tagId)).filter(Boolean) as TagType[];
+
   return (
     <Draggable draggableId={card.id} index={index}>
       {(provided, snapshot) => (
@@ -67,12 +70,11 @@ export function KanbanCard({ card, index, onClick, onUpdateTitle, onDelete, onDu
           </div>
 
           <div className="flex flex-wrap gap-1.5 mb-3">
-            <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">
-              {card.channel}
-            </span>
-            <span className={`text-[10px] border px-2 py-0.5 rounded-md font-medium ${funnelColors[card.funnelStage]}`}>
-              {card.funnelStage}
-            </span>
+            {cardTags.map(tag => (
+              <span key={tag.id} className={`text-[10px] px-2 py-0.5 rounded-md font-medium ${tag.colorBg} ${tag.colorText}`}>
+                {tag.text}
+              </span>
+            ))}
           </div>
 
           <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-50">

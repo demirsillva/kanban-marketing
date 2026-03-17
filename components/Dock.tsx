@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, FolderKanban, Calendar, Users, BarChart3, Settings, Sliders, Kanban, Briefcase, Columns2 } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Calendar, Users, BarChart3, Sliders, Kanban, Wrench, Settings2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, useMotionValue, useSpring, useTransform, Reorder, AnimatePresence } from 'motion/react';
 import { useRef, useState, useEffect } from 'react';
@@ -25,8 +25,10 @@ const initialNavItems: NavItem[] = [
   { id: 'kanban', icon: Kanban, label: 'Kanban', href: '/' },
   { id: 'projects', icon: FolderKanban, label: 'Projetos', href: '/projects' },
   { id: 'calendar', icon: Calendar, label: 'Calendário', href: '/calendar' },
+  { id: 'ferramentas', icon: Wrench, label: 'Ferramentas', href: '/ferramentas' },
   { id: 'team', icon: Users, label: 'Equipe', href: '/team' },
   { id: 'reports', icon: BarChart3, label: 'Relatórios', href: '/reports' },
+  { id: 'configuracoes', icon: Settings2, label: 'Configurações', href: '/configuracoes' },
 ];
 
 function DockIcon({ 

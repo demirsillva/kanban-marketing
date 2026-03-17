@@ -1,7 +1,8 @@
 'use client';
 
-import { Search, Bell, HelpCircle } from 'lucide-react';
+import { Search, Bell, HelpCircle, Settings2 } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export function TopBar() {
   return (
@@ -17,7 +18,7 @@ export function TopBar() {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <button className="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors relative">
           <Bell className="w-5 h-5" />
           <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
@@ -25,10 +26,17 @@ export function TopBar() {
         <button className="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
           <HelpCircle className="w-5 h-5" />
         </button>
-        
+        <Link
+          href="/configuracoes"
+          className="p-2 text-slate-500 hover:bg-slate-50 hover:text-indigo-600 rounded-full transition-colors"
+          title="Configurações"
+        >
+          <Settings2 className="w-5 h-5" />
+        </Link>
+
         <div className="h-8 w-px bg-slate-200 mx-2"></div>
 
-        <div className="flex items-center gap-3 pl-2">
+        <div className="flex items-center gap-3">
           <div className="text-right hidden sm:block">
             <p className="text-sm font-semibold text-slate-900">Demir Silva</p>
             <p className="text-xs text-slate-500">Marketing Manager</p>

@@ -64,7 +64,7 @@ export function useKanban() {
         ...destCol,
         cardIds: newDestCardIds,
       };
-      
+
       // Update card status
       newBoard.cards[cardId] = {
         ...newBoard.cards[cardId],
@@ -89,7 +89,7 @@ export function useKanban() {
   const addCard = (columnId: string, card: Omit<Card, 'id' | 'status'>) => {
     const id = `card-${Date.now()}`;
     const newCard: Card = { ...card, id, status: columnId };
-    
+
     setBoard(prev => ({
       ...prev,
       cards: { ...prev.cards, [id]: newCard },
@@ -133,10 +133,10 @@ export function useKanban() {
     if (!cardToDuplicate) return;
 
     const newId = `card-${Date.now()}`;
-    const newCard: Card = { 
-      ...cardToDuplicate, 
-      id: newId, 
-      title: `${cardToDuplicate.title} (Cópia)` 
+    const newCard: Card = {
+      ...cardToDuplicate,
+      id: newId,
+      title: `${cardToDuplicate.title} (Cópia)`
     };
 
     setBoard(prev => ({
@@ -152,9 +152,9 @@ export function useKanban() {
     }));
   };
 
-  const addColumn = (title: string) => {
+  const addColumn = (title: string, color?: string) => {
     const id = `col-${Date.now()}`;
-    const newColumn: Column = { id, title, cardIds: [] };
+    const newColumn: Column = { id, title, cardIds: [], color };
 
     setBoard(prev => ({
       ...prev,
@@ -181,12 +181,12 @@ export function useKanban() {
     });
   };
 
-  const updateColumn = (columnId: string, title: string) => {
+  const updateColumn = (columnId: string, updates: Partial<Omit<Column, 'id' | 'cardIds'>>) => {
     setBoard(prev => ({
       ...prev,
       columns: {
         ...prev.columns,
-        [columnId]: { ...prev.columns[columnId], title },
+        [columnId]: { ...prev.columns[columnId], ...updates },
       },
     }));
   };
@@ -210,7 +210,7 @@ export function useKanban() {
     setBoard(prev => {
       // Remove the tag from availableTags
       const newAvailableTags = prev.availableTags.filter(t => t.id !== tagId);
-      
+
       // Remove the tag from all cards that have it
       const newCards = { ...prev.cards };
       Object.keys(newCards).forEach(cardId => {

@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Dock } from '@/components/Dock';
-import { TopBar } from '@/components/TopBar';
 import {
   BarChart3, CheckCircle2, Clock, AlertCircle, TrendingUp,
   Sparkles, PenLine, Save, Copy, Trash2, ChevronDown,
@@ -150,7 +148,7 @@ function BarChart({ data }: { data: { label: string; value: number }[] }) {
       {data.map((d, i) => (
         <div key={i} className="flex flex-col items-center gap-1.5 flex-1">
           <span className="text-[10px] font-bold text-indigo-600">{d.value}</span>
-          <div className="w-full bg-indigo-100 rounded-lg overflow-hidden flex flex-col justify-end" style={{ height: 90 }}>
+          <div className="w-full bg-indigo-100 dark:bg-slate-800 rounded-lg overflow-hidden flex flex-col justify-end transition-colors" style={{ height: 90 }}>
             <motion.div
               initial={{ height: 0 }}
               animate={{ height: `${(d.value / max) * 100}%` }}
@@ -158,7 +156,7 @@ function BarChart({ data }: { data: { label: string; value: number }[] }) {
               className="w-full bg-gradient-to-t from-indigo-600 to-violet-500 rounded-lg"
             />
           </div>
-          <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap">{d.label}</span>
+          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium whitespace-nowrap">{d.label}</span>
         </div>
       ))}
     </div>
@@ -197,14 +195,14 @@ function DonutChart({ data }: { data: { stage: string; count: number; color: str
             />
           );
         })}
-        <text x={50} y={54} textAnchor="middle" fontSize={14} fontWeight="bold" fill="#1e293b">{total}</text>
+        <text x={50} y={54} textAnchor="middle" fontSize={14} fontWeight="bold" fill="currentColor" className="text-slate-900 dark:text-slate-100">{total}</text>
       </svg>
       <div className="space-y-1.5">
         {data.map((d) => (
           <div key={d.stage} className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: d.color }} />
-            <span className="text-xs text-slate-600">{d.stage}</span>
-            <span className="text-xs font-bold text-slate-900 ml-auto pl-2">{d.count}</span>
+            <span className="text-xs text-slate-600 dark:text-slate-400 dark:text-slate-500">{d.stage}</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-slate-100 ml-auto pl-2">{d.count}</span>
           </div>
         ))}
       </div>
@@ -284,274 +282,264 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-28">
-      <TopBar />
+    <>
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20 transition-colors">
+          <BarChart3 className="w-5 h-5" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Relatórios</h1>
+          <p className="text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm">Acompanhe desempenho, métricas e gerencie seus reports de atividade.</p>
+        </div>
+      </div>
 
-      <main className="p-8 overflow-y-auto">
-        <div className="max-w-7xl mx-auto space-y-8">
+      {/* Period Tabs */}
+      <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-1.5 w-fit shadow-sm transition-colors">
+        {(['today', 'week', 'month', 'custom'] as Period[]).map(p => (
+          <button
+            key={p}
+            onClick={() => setPeriod(p)}
+            className={cn(
+              'flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all',
+              period === p ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:bg-slate-800/50'
+            )}
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            {{ today: 'Hoje', week: 'Semana', month: 'Mês', custom: 'Personalizado' }[p]}
+          </button>
+        ))}
+      </div>
 
-          {/* Header */}
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-              <BarChart3 className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Relatórios</h1>
-              <p className="text-slate-500 text-sm">Acompanhe desempenho, métricas e gerencie seus reports de atividade.</p>
-            </div>
-          </div>
-
-          {/* Period Tabs */}
-          <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-2xl p-1.5 w-fit shadow-sm">
-            {(['today', 'week', 'month', 'custom'] as Period[]).map(p => (
-              <button
-                key={p}
-                onClick={() => setPeriod(p)}
-                className={cn(
-                  'flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all',
-                  period === p ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+      {/* KPI Strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        {[
+          { label: 'Tarefas concluídas', value: data.done, icon: CheckCircle2, color: 'from-emerald-500 to-teal-600', bg: 'emerald' },
+          { label: 'Em andamento', value: data.inProgress, icon: Clock, color: 'from-blue-500 to-cyan-600', bg: 'blue' },
+          { label: 'Atrasadas', value: data.late, icon: AlertCircle, color: 'from-red-500 to-rose-600', bg: 'red' },
+          { label: 'Total no período', value: data.total, icon: FileText, color: 'from-slate-500 to-slate-600', bg: 'slate' },
+          {
+            label: 'Produtividade',
+            value: `${data.productivity}%`,
+            icon: TrendingUp,
+            color: 'from-indigo-500 to-violet-600',
+            bg: 'indigo',
+            trend: data.trendDir,
+            trendPct: data.trendPct,
+          },
+        ].map((kpi, i) => {
+          const Icon = kpi.icon;
+          return (
+            <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-5 transition-colors">
+              <div className="flex items-start justify-between mb-3">
+                <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${kpi.color} flex items-center justify-center`}>
+                  <Icon className="w-4 h-4 text-white" />
+                </div>
+                {'trend' in kpi && (
+                  <div className={cn('flex items-center gap-0.5 text-xs font-bold', kpi.trend === 'up' ? 'text-emerald-600' : 'text-red-500')}>
+                    {kpi.trend === 'up' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
+                    {kpi.trendPct}%
+                  </div>
                 )}
+              </div>
+              <p className="text-2xl font-black text-slate-900 dark:text-slate-100 leading-none">{kpi.value}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 dark:text-slate-500 mt-1">{kpi.label}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {/* Bar Chart */}
+        <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 transition-colors">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">Atividade no Período</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 dark:text-slate-500 mb-4">Tarefas concluídas por {period === 'today' ? 'hora' : period === 'week' ? 'dia' : 'semana'}</p>
+          <BarChart data={data.barData} />
+        </div>
+
+        {/* Donut */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 transition-colors">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-1">Por Estágio</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 dark:text-slate-500 mb-4">Distribuição das tarefas</p>
+          <DonutChart data={data.stageData} />
+        </div>
+      </div>
+
+      {/* Recent tasks timeline */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 transition-colors">
+        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-4">Atividades Recentes</h3>
+        <div className="space-y-2">
+          {data.recentTasks.map((task, i) => (
+            <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
+              <div className={cn('w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0', task.done ? 'bg-emerald-100 dark:bg-emerald-500/10' : 'bg-slate-100 dark:bg-slate-800')}>
+                {task.done
+                  ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  : <Clock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+                }
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className={cn('text-sm font-semibold truncate', task.done ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400 dark:text-slate-500 line-through')}>{task.title}</p>
+              </div>
+              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full flex-shrink-0" style={{ backgroundColor: task.labelColor + '20', color: task.labelColor }}>
+                {task.label}
+              </span>
+              <span className="text-[10px] text-slate-400 dark:text-slate-500 flex-shrink-0 w-12 text-right">{task.completedAt || '—'}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Report Generator ─────────────────────────────────────────────── */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">Gerar Report</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500 mt-0.5">Escreva manualmente ou deixe a IA resumir suas atividades do período.</p>
+            </div>
+            {/* Mode Toggle */}
+            <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex-shrink-0">
+              <button
+                onClick={() => setReportMode('manual')}
+                className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all', reportMode === 'manual' ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm' : 'text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:text-slate-300')}
               >
-                <Calendar className="w-3.5 h-3.5" />
-                {{ today: 'Hoje', week: 'Semana', month: 'Mês', custom: 'Personalizado' }[p]}
+                <PenLine className="w-3.5 h-3.5" /> Manual
               </button>
-            ))}
-          </div>
-
-          {/* KPI Strip */}
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-            {[
-              { label: 'Tarefas concluídas', value: data.done, icon: CheckCircle2, color: 'from-emerald-500 to-teal-600', bg: 'emerald' },
-              { label: 'Em andamento', value: data.inProgress, icon: Clock, color: 'from-blue-500 to-cyan-600', bg: 'blue' },
-              { label: 'Atrasadas', value: data.late, icon: AlertCircle, color: 'from-red-500 to-rose-600', bg: 'red' },
-              { label: 'Total no período', value: data.total, icon: FileText, color: 'from-slate-500 to-slate-600', bg: 'slate' },
-              {
-                label: 'Produtividade',
-                value: `${data.productivity}%`,
-                icon: TrendingUp,
-                color: 'from-indigo-500 to-violet-600',
-                bg: 'indigo',
-                trend: data.trendDir,
-                trendPct: data.trendPct,
-              },
-            ].map((kpi, i) => {
-              const Icon = kpi.icon;
-              return (
-                <div key={i} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${kpi.color} flex items-center justify-center`}>
-                      <Icon className="w-4 h-4 text-white" />
-                    </div>
-                    {'trend' in kpi && (
-                      <div className={cn('flex items-center gap-0.5 text-xs font-bold', kpi.trend === 'up' ? 'text-emerald-600' : 'text-red-500')}>
-                        {kpi.trend === 'up' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
-                        {kpi.trendPct}%
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-2xl font-black text-slate-900 leading-none">{kpi.value}</p>
-                  <p className="text-xs text-slate-500 mt-1">{kpi.label}</p>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {/* Bar Chart */}
-            <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-              <h3 className="text-sm font-bold text-slate-900 mb-1">Atividade no Período</h3>
-              <p className="text-xs text-slate-500 mb-4">Tarefas concluídas por {period === 'today' ? 'hora' : period === 'week' ? 'dia' : 'semana'}</p>
-              <BarChart data={data.barData} />
-            </div>
-
-            {/* Donut */}
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-              <h3 className="text-sm font-bold text-slate-900 mb-1">Por Estágio</h3>
-              <p className="text-xs text-slate-500 mb-4">Distribuição das tarefas</p>
-              <DonutChart data={data.stageData} />
+              <button
+                onClick={() => setReportMode('ai')}
+                className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all', reportMode === 'ai' ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm' : 'text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:text-slate-300')}
+              >
+                <Sparkles className="w-3.5 h-3.5" /> IA
+              </button>
             </div>
           </div>
 
-          {/* Recent tasks timeline */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-            <h3 className="text-sm font-bold text-slate-900 mb-4">Atividades Recentes</h3>
-            <div className="space-y-2">
-              {data.recentTasks.map((task, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
-                  <div className={cn('w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0', task.done ? 'bg-emerald-100' : 'bg-slate-100')}>
-                    {task.done
-                      ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                      : <Clock className="w-3.5 h-3.5 text-slate-400" />
-                    }
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className={cn('text-sm font-semibold truncate', task.done ? 'text-slate-900' : 'text-slate-500 line-through')}>{task.title}</p>
-                  </div>
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full flex-shrink-0" style={{ backgroundColor: task.labelColor + '20', color: task.labelColor }}>
-                    {task.label}
-                  </span>
-                  <span className="text-[10px] text-slate-400 flex-shrink-0 w-12 text-right">{task.completedAt || '—'}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Title input */}
+          <input
+            value={reportTitle}
+            onChange={(e) => setReportTitle(e.target.value)}
+            placeholder={`Título do report — ex: Relatório ${periodLabel} ${new Date().toLocaleDateString('pt-BR')}`}
+            className="mt-4 w-full px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 transition-colors"
+          />
+        </div>
 
-          {/* ── Report Generator ─────────────────────────────────────────────── */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-slate-100">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900">Gerar Report</h3>
-                  <p className="text-sm text-slate-500 mt-0.5">Escreva manualmente ou deixe a IA resumir suas atividades do período.</p>
+        <div className="p-6 space-y-4">
+          <AnimatePresence mode="wait">
+            {/* Manual Mode */}
+            {reportMode === 'manual' && (
+              <motion.div key="manual" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}>
+                <textarea
+                  value={manualText}
+                  onChange={(e) => setManualText(e.target.value)}
+                  placeholder={`Descreva o que foi feito ${period === 'today' ? 'hoje' : period === 'week' ? 'esta semana' : 'este mês'}...\n\nEx:\n- Finalizei os banners da campanha Black Friday\n- Revisei e aprovei roteiro do vídeo institucional\n- Configurei públicos no Meta Ads para o novo produto\n\nPrioridades para amanhã:\n- ...`}
+                  rows={10}
+                  className="w-full px-4 py-3 text-sm bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 resize-none leading-relaxed transition-colors"
+                />
+              </motion.div>
+            )}
+
+            {/* AI Mode */}
+            {reportMode === 'ai' && (
+              <motion.div key="ai" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} className="space-y-4">
+                <div className="bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 rounded-xl p-4 transition-colors">
+                  <p className="text-sm text-indigo-700 dark:text-indigo-400 flex items-start gap-2">
+                    <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                    A IA vai analisar as tarefas concluídas e pendentes do período selecionado (<strong>{periodLabel}</strong>) e gerar um relatório narrativo completo.
+                  </p>
                 </div>
-                {/* Mode Toggle */}
-                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl flex-shrink-0">
-                  <button
-                    onClick={() => setReportMode('manual')}
-                    className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all', reportMode === 'manual' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700')}
-                  >
-                    <PenLine className="w-3.5 h-3.5" /> Manual
+
+                <button
+                  onClick={handleGenerateAI}
+                  disabled={aiLoading}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-bold rounded-xl hover:opacity-90 transition-all shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {aiLoading ? <><RefreshCw className="w-4 h-4 animate-spin" /> Gerando relatório...</> : <><Sparkles className="w-4 h-4" /> Gerar com IA</>}
+                </button>
+
+                <AnimatePresence>
+                  {aiOutput && (
+                    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800 p-5 max-h-80 overflow-y-auto transition-colors">
+                      <pre className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap font-sans leading-relaxed">{aiOutput}</pre>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Actions */}
+          {currentContent && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 transition-colors">
+              <button
+                onClick={handleSave}
+                className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100 dark:shadow-indigo-900/20"
+              >
+                {saved ? <><CheckCheck className="w-4 h-4" /> Salvo!</> : <><Save className="w-4 h-4" /> Salvar report</>}
+              </button>
+              <button
+                onClick={() => handleCopy(currentContent, 'current')}
+                className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-bold rounded-xl hover:bg-slate-200 dark:bg-slate-700 transition-all"
+              >
+                {copiedId === 'current' ? <><CheckCheck className="w-4 h-4 text-emerald-600" /> Copiado!</> : <><Copy className="w-4 h-4" /> Copiar</>}
+              </button>
+            </motion.div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Saved Reports ──────────────────────────────────────────────────── */}
+      {savedReports.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-xs font-bold uppercase text-slate-400 dark:text-slate-500 tracking-widest">Reports Salvos</h3>
+          {savedReports.map(report => (
+            <div key={report.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
+              <div className="flex items-center gap-4 p-4">
+                <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0', report.mode === 'ai' ? 'bg-gradient-to-br from-indigo-500 to-violet-600' : 'bg-slate-100 dark:bg-slate-800')}>
+                  {report.mode === 'ai' ? <Sparkles className="w-4 h-4 text-white" /> : <PenLine className="w-4 h-4 text-slate-500 dark:text-slate-400 dark:text-slate-500" />}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">{report.title}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 px-1.5 py-0.5 rounded-full transition-colors">{report.period}</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500">{report.createdAt}</span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500">• {report.mode === 'ai' ? 'Gerado por IA' : 'Escrito manualmente'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <button onClick={() => handleCopy(report.content, report.id)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-lg transition-all">
+                    {copiedId === report.id ? <CheckCheck className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                   </button>
-                  <button
-                    onClick={() => setReportMode('ai')}
-                    className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all', reportMode === 'ai' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700')}
-                  >
-                    <Sparkles className="w-3.5 h-3.5" /> IA
+                  <button onClick={() => handleDelete(report.id)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => setExpandedReport(expandedReport === report.id ? null : report.id)} className={cn('p-2 rounded-lg transition-all', expandedReport === report.id ? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:bg-slate-800/50')}>
+                    <ChevronDown className={cn('w-4 h-4 transition-transform', expandedReport === report.id && 'rotate-180')} />
                   </button>
                 </div>
               </div>
 
-              {/* Title input */}
-              <input
-                value={reportTitle}
-                onChange={(e) => setReportTitle(e.target.value)}
-                placeholder={`Título do report — ex: Relatório ${periodLabel} ${new Date().toLocaleDateString('pt-BR')}`}
-                className="mt-4 w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-800 placeholder:text-slate-400"
-              />
-            </div>
-
-            <div className="p-6 space-y-4">
-              <AnimatePresence mode="wait">
-                {/* Manual Mode */}
-                {reportMode === 'manual' && (
-                  <motion.div key="manual" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}>
-                    <textarea
-                      value={manualText}
-                      onChange={(e) => setManualText(e.target.value)}
-                      placeholder={`Descreva o que foi feito ${period === 'today' ? 'hoje' : period === 'week' ? 'esta semana' : 'este mês'}...\n\nEx:\n- Finalizei os banners da campanha Black Friday\n- Revisei e aprovei roteiro do vídeo institucional\n- Configurei públicos no Meta Ads para o novo produto\n\nPrioridades para amanhã:\n- ...`}
-                      rows={10}
-                      className="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-800 placeholder:text-slate-400 resize-none leading-relaxed"
-                    />
-                  </motion.div>
-                )}
-
-                {/* AI Mode */}
-                {reportMode === 'ai' && (
-                  <motion.div key="ai" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} className="space-y-4">
-                    <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
-                      <p className="text-sm text-indigo-700 flex items-start gap-2">
-                        <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                        A IA vai analisar as tarefas concluídas e pendentes do período selecionado (<strong>{periodLabel}</strong>) e gerar um relatório narrativo completo.
-                      </p>
+              <AnimatePresence>
+                {expandedReport === report.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-4 pb-4 pt-0 border-t border-slate-100 dark:border-slate-800 transition-colors">
+                      <pre className="text-sm text-slate-600 dark:text-slate-400 dark:text-slate-500 whitespace-pre-wrap font-sans leading-relaxed max-h-60 overflow-y-auto bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 mt-3">
+                        {report.content}
+                      </pre>
                     </div>
-
-                    <button
-                      onClick={handleGenerateAI}
-                      disabled={aiLoading}
-                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-bold rounded-xl hover:opacity-90 transition-all shadow-lg shadow-indigo-200 disabled:opacity-60 disabled:cursor-not-allowed"
-                    >
-                      {aiLoading ? <><RefreshCw className="w-4 h-4 animate-spin" /> Gerando relatório...</> : <><Sparkles className="w-4 h-4" /> Gerar com IA</>}
-                    </button>
-
-                    <AnimatePresence>
-                      {aiOutput && (
-                        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="bg-slate-50 rounded-xl border border-slate-200 p-5 max-h-80 overflow-y-auto">
-                          <pre className="text-sm text-slate-700 whitespace-pre-wrap font-sans leading-relaxed">{aiOutput}</pre>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              {/* Actions */}
-              {currentContent && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 pt-2 border-t border-slate-100">
-                  <button
-                    onClick={handleSave}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100"
-                  >
-                    {saved ? <><CheckCheck className="w-4 h-4" /> Salvo!</> : <><Save className="w-4 h-4" /> Salvar report</>}
-                  </button>
-                  <button
-                    onClick={() => handleCopy(currentContent, 'current')}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-700 text-sm font-bold rounded-xl hover:bg-slate-200 transition-all"
-                  >
-                    {copiedId === 'current' ? <><CheckCheck className="w-4 h-4 text-emerald-600" /> Copiado!</> : <><Copy className="w-4 h-4" /> Copiar</>}
-                  </button>
-                </motion.div>
-              )}
             </div>
-          </div>
-
-          {/* ── Saved Reports ──────────────────────────────────────────────────── */}
-          {savedReports.length > 0 && (
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase text-slate-400 tracking-widest">Reports Salvos</h3>
-              {savedReports.map(report => (
-                <div key={report.id} className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-                  <div className="flex items-center gap-4 p-4">
-                    <div className={cn('w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0', report.mode === 'ai' ? 'bg-gradient-to-br from-indigo-500 to-violet-600' : 'bg-slate-100')}>
-                      {report.mode === 'ai' ? <Sparkles className="w-4 h-4 text-white" /> : <PenLine className="w-4 h-4 text-slate-500" />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-slate-900 truncate">{report.title}</p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-full">{report.period}</span>
-                        <span className="text-[10px] text-slate-400">{report.createdAt}</span>
-                        <span className="text-[10px] text-slate-400">• {report.mode === 'ai' ? 'Gerado por IA' : 'Escrito manualmente'}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <button onClick={() => handleCopy(report.content, report.id)} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
-                        {copiedId === report.id ? <CheckCheck className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                      </button>
-                      <button onClick={() => handleDelete(report.id)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => setExpandedReport(expandedReport === report.id ? null : report.id)} className={cn('p-2 rounded-lg transition-all', expandedReport === report.id ? 'bg-slate-100 text-slate-700' : 'text-slate-400 hover:bg-slate-50')}>
-                        <ChevronDown className={cn('w-4 h-4 transition-transform', expandedReport === report.id && 'rotate-180')} />
-                      </button>
-                    </div>
-                  </div>
-
-                  <AnimatePresence>
-                    {expandedReport === report.id && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-4 pb-4 pt-0 border-t border-slate-100">
-                          <pre className="text-sm text-slate-600 whitespace-pre-wrap font-sans leading-relaxed max-h-60 overflow-y-auto bg-slate-50 rounded-xl p-4 mt-3">
-                            {report.content}
-                          </pre>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </div>
-          )}
-
+          ))}
         </div>
-      </main>
-
-      <Dock />
-    </div>
+      )}
+    </>
   );
 }

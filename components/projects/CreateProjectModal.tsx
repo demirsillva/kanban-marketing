@@ -81,48 +81,48 @@ export function CreateProjectModal({ isOpen, folderId, existing, onClose, onSave
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-lg bg-white rounded-2xl shadow-2xl pointer-events-auto overflow-hidden flex flex-col max-h-[90vh]"
+              className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl pointer-events-auto overflow-hidden flex flex-col max-h-[90vh]"
             >
               <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                <h2 className="text-lg font-bold text-slate-900">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                   {existing ? 'Editar Projeto' : 'Novo Projeto'}
                 </h2>
-                <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <button onClick={onClose} className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:bg-slate-800/50 rounded-lg transition-colors">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               <div className="p-6 space-y-5 overflow-y-auto flex-1">
                 <div>
-                  <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1.5 block">Nome do Projeto</label>
+                  <label className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider mb-1.5 block">Nome do Projeto</label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Ex: Black Friday 2026"
-                    className="w-full px-3 py-2.5 text-sm text-slate-800 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300"
+                    className="w-full px-3 py-2.5 text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300"
                     autoFocus
                   />
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1.5 block">Descrição</label>
+                  <label className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider mb-1.5 block">Descrição</label>
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Descreva o objetivo deste projeto..."
                     rows={2}
-                    className="w-full px-3 py-2.5 text-sm text-slate-800 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300 resize-none"
+                    className="w-full px-3 py-2.5 text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300 resize-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1.5 block">Status</label>
+                    <label className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider mb-1.5 block">Status</label>
                     <select
                       value={status}
                       onChange={(e) => setStatus(e.target.value as Project['status'])}
-                      className="w-full px-3 py-2.5 text-sm text-slate-700 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+                      className="w-full px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
                     >
                       <option value="Ativo">Ativo</option>
                       <option value="Pausado">Pausado</option>
@@ -130,19 +130,19 @@ export function CreateProjectModal({ isOpen, folderId, existing, onClose, onSave
                     </select>
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1.5 block">Data de Entrega</label>
+                    <label className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider mb-1.5 block">Data de Entrega</label>
                     <input
                       type="date"
                       value={dueDate}
                       onChange={(e) => setDueDate(e.target.value)}
-                      className="w-full px-3 py-2.5 text-sm text-slate-700 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+                      className="w-full px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
                     />
                   </div>
                 </div>
 
                 {/* Tasks */}
                 <div>
-                  <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-2 block">Tarefas</label>
+                  <label className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider mb-2 block">Tarefas</label>
                   <div className="space-y-1.5 mb-2">
                     {tasks.map(task => (
                       <div key={task.id} className="flex items-center gap-2 group/task">
@@ -152,12 +152,12 @@ export function CreateProjectModal({ isOpen, folderId, existing, onClose, onSave
                             : <Square className="w-4 h-4 text-slate-300" />
                           }
                         </button>
-                        <span className={`text-sm flex-1 ${task.completed ? 'line-through text-slate-400' : 'text-slate-700'}`}>
+                        <span className={`text-sm flex-1 ${task.completed ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-300'}`}>
                           {task.title}
                         </span>
                         <button
                           onClick={() => removeTask(task.id)}
-                          className="opacity-0 group-hover/task:opacity-100 p-0.5 text-slate-400 hover:text-red-500 transition-all"
+                          className="opacity-0 group-hover/task:opacity-100 p-0.5 text-slate-400 dark:text-slate-500 hover:text-red-500 transition-all"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -171,7 +171,7 @@ export function CreateProjectModal({ isOpen, folderId, existing, onClose, onSave
                       onChange={(e) => setNewTaskTitle(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addTask()}
                       placeholder="Adicionar tarefa..."
-                      className="flex-1 px-3 py-2 text-sm text-slate-800 bg-slate-50 rounded-xl border border-dashed border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300"
+                      className="flex-1 px-3 py-2 text-sm text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300"
                     />
                     <button
                       onClick={addTask}
@@ -184,8 +184,8 @@ export function CreateProjectModal({ isOpen, folderId, existing, onClose, onSave
                 </div>
               </div>
 
-              <div className="p-6 bg-slate-50/50 border-t border-slate-100 flex justify-end gap-3">
-                <button onClick={onClose} className="px-5 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-all">
+              <div className="p-6 bg-slate-50 dark:bg-slate-800/50/50 border-t border-slate-100 flex justify-end gap-3">
+                <button onClick={onClose} className="px-5 py-2 text-sm font-bold text-slate-600 dark:text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:bg-slate-800 rounded-xl transition-all">
                   Cancelar
                 </button>
                 <button

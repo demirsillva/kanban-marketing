@@ -40,7 +40,7 @@ export function FolderCard({ folder, projectCount, onClick, onEdit, onDelete }: 
   return (
     <div
       onClick={onClick}
-      className={`group relative bg-white rounded-2xl border-2 ${colors.border} shadow-sm hover:shadow-lg transition-all cursor-pointer overflow-hidden`}
+      className={`group relative bg-white dark:bg-slate-900 rounded-2xl border-2 ${colors.border} shadow-sm hover:shadow-lg transition-all cursor-pointer overflow-hidden`}
     >
       {/* Color accent strip */}
       <div className={`h-1.5 w-full ${colors.bg}`} />
@@ -57,13 +57,13 @@ export function FolderCard({ folder, projectCount, onClick, onEdit, onDelete }: 
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative group/menu">
-              <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+              <button className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:bg-slate-800 transition-colors">
                 <MoreVertical className="w-4 h-4" />
               </button>
-              <div className="absolute right-0 top-8 bg-white border border-slate-100 shadow-xl rounded-xl py-1.5 z-10 w-40 hidden group-hover/menu:block">
+              <div className="absolute right-0 top-8 bg-white dark:bg-slate-900 border border-slate-100 shadow-xl rounded-xl py-1.5 z-10 w-40 hidden group-hover/menu:block">
                 <button
                   onClick={onEdit}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:bg-slate-800/50 transition-colors"
                 >
                   <Pencil className="w-3.5 h-3.5" /> Renomear
                 </button>
@@ -78,14 +78,14 @@ export function FolderCard({ folder, projectCount, onClick, onEdit, onDelete }: 
           </div>
         </div>
 
-        <h3 className="font-bold text-slate-900 text-base mb-1 leading-tight">{folder.name}</h3>
-        <p className="text-xs text-slate-500 line-clamp-2 mb-4">{folder.description}</p>
+        <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base mb-1 leading-tight">{folder.name}</h3>
+        <p className="text-xs text-slate-500 dark:text-slate-400 dark:text-slate-500 line-clamp-2 mb-4">{folder.description}</p>
 
         <div className="flex items-center justify-between">
           <span className={`text-[11px] font-bold uppercase tracking-wider ${colors.text}`}>
             {projectCount} {projectCount === 1 ? 'projeto' : 'projetos'}
           </span>
-          <span className="text-[11px] text-slate-400 flex items-center gap-1">
+          <span className="text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1">
             <FolderOpen className="w-3 h-3" /> Abrir
           </span>
         </div>

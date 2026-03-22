@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Dock } from '@/components/Dock';
-import { TopBar } from '@/components/TopBar';
 import {
   Users, TrendingUp, CheckCircle2, Clock, AlertCircle,
   MoreHorizontal, Search, Filter, ChevronDown,
@@ -144,7 +142,7 @@ const MEMBERS: Member[] = [
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 const STAGE_CONFIG = {
-  todo:    { label: 'A fazer',     color: 'bg-slate-200 text-slate-700' },
+  todo:    { label: 'A fazer',     color: 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300' },
   doing:   { label: 'Em andamento', color: 'bg-blue-100 text-blue-700' },
   review:  { label: 'Em revisão',  color: 'bg-amber-100 text-amber-700' },
   done:    { label: 'Concluído',   color: 'bg-emerald-100 text-emerald-700' },
@@ -191,7 +189,7 @@ function ActivityBars({ data }: { data: number[] }) {
             className="w-full bg-indigo-500 rounded-sm transition-all"
             style={{ height: `${Math.max(3, (v / max) * 32)}px` }}
           />
-          <span className="text-[9px] text-slate-400 font-medium">{days[i]}</span>
+          <span className="text-[9px] text-slate-400 dark:text-slate-500 font-medium">{days[i]}</span>
         </div>
       ))}
     </div>
@@ -203,14 +201,14 @@ function ActivityBars({ data }: { data: number[] }) {
 function MemberCard({ member, onClick, isSelected }: { member: Member; onClick: () => void; isSelected: boolean }) {
   const progress = Math.round((member.tasksDone / member.tasksTotal) * 100);
   const TrendIcon = member.productivityTrend === 'up' ? ArrowUp : member.productivityTrend === 'down' ? ArrowDown : Minus;
-  const trendColor = member.productivityTrend === 'up' ? 'text-emerald-600' : member.productivityTrend === 'down' ? 'text-red-500' : 'text-slate-400';
+  const trendColor = member.productivityTrend === 'up' ? 'text-emerald-600' : member.productivityTrend === 'down' ? 'text-red-500' : 'text-slate-400 dark:text-slate-500';
 
   return (
     <motion.div
       whileHover={{ y: -2 }}
       onClick={onClick}
       className={cn(
-        'bg-white rounded-2xl border-2 shadow-sm cursor-pointer transition-all overflow-hidden',
+        'bg-white dark:bg-slate-900 rounded-2xl border-2 shadow-sm cursor-pointer transition-all overflow-hidden',
         isSelected ? 'border-indigo-500 shadow-lg shadow-indigo-100' : 'border-slate-100 hover:border-indigo-200 hover:shadow-md'
       )}
     >
@@ -223,9 +221,9 @@ function MemberCard({ member, onClick, isSelected }: { member: Member; onClick: 
               <span className={cn('absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white', STATUS_CONFIG[member.status].color)} />
             </div>
             <div>
-              <p className="font-bold text-slate-900 text-sm leading-tight">{member.name}</p>
-              <p className="text-xs text-slate-500">{member.role}</p>
-              <p className="text-[10px] text-slate-400 mt-0.5">{member.lastActive}</p>
+              <p className="font-bold text-slate-900 dark:text-slate-100 text-sm leading-tight">{member.name}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 dark:text-slate-500">{member.role}</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{member.lastActive}</p>
             </div>
           </div>
           <div className={cn('flex items-center gap-0.5 text-xs font-bold', trendColor)}>
@@ -236,27 +234,27 @@ function MemberCard({ member, onClick, isSelected }: { member: Member; onClick: 
 
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-2 mb-4">
-          <div className="bg-slate-50 rounded-xl p-2.5 text-center">
-            <p className="text-lg font-bold text-slate-900 leading-none">{member.tasksDone}</p>
-            <p className="text-[10px] text-slate-500 mt-0.5">Concluídas</p>
+          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-2.5 text-center">
+            <p className="text-lg font-bold text-slate-900 dark:text-slate-100 leading-none">{member.tasksDone}</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 dark:text-slate-500 mt-0.5">Concluídas</p>
           </div>
           <div className="bg-blue-50 rounded-xl p-2.5 text-center">
             <p className="text-lg font-bold text-blue-700 leading-none">{member.tasksInProgress}</p>
             <p className="text-[10px] text-blue-600 mt-0.5">Em andamento</p>
           </div>
-          <div className={cn('rounded-xl p-2.5 text-center', member.tasksLate > 0 ? 'bg-red-50' : 'bg-slate-50')}>
-            <p className={cn('text-lg font-bold leading-none', member.tasksLate > 0 ? 'text-red-600' : 'text-slate-400')}>{member.tasksLate}</p>
-            <p className={cn('text-[10px] mt-0.5', member.tasksLate > 0 ? 'text-red-500' : 'text-slate-400')}>Atrasadas</p>
+          <div className={cn('rounded-xl p-2.5 text-center', member.tasksLate > 0 ? 'bg-red-50' : 'bg-slate-50 dark:bg-slate-800/50')}>
+            <p className={cn('text-lg font-bold leading-none', member.tasksLate > 0 ? 'text-red-600' : 'text-slate-400 dark:text-slate-500')}>{member.tasksLate}</p>
+            <p className={cn('text-[10px] mt-0.5', member.tasksLate > 0 ? 'text-red-500' : 'text-slate-400 dark:text-slate-500')}>Atrasadas</p>
           </div>
         </div>
 
         {/* Progress bar */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Progresso</span>
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 dark:text-slate-500 uppercase tracking-wider">Progresso</span>
             <span className="text-xs font-bold text-indigo-600">{progress}%</span>
           </div>
-          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
@@ -289,7 +287,7 @@ function MemberDetail({ member }: { member: Member }) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 8 }}
-      className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden"
+      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 shadow-sm overflow-hidden"
     >
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-violet-600 p-6 flex items-center gap-5">
@@ -318,33 +316,33 @@ function MemberDetail({ member }: { member: Member }) {
         {/* Summary stats */}
         <div className="grid grid-cols-4 gap-3">
           {[
-            { label: 'Total de tarefas', value: member.tasksTotal, color: 'text-slate-900', bg: 'bg-slate-50' },
+            { label: 'Total de tarefas', value: member.tasksTotal, color: 'text-slate-900 dark:text-slate-100', bg: 'bg-slate-50 dark:bg-slate-800/50' },
             { label: 'Concluídas', value: member.tasksDone, color: 'text-emerald-700', bg: 'bg-emerald-50' },
             { label: 'Em andamento', value: member.tasksInProgress, color: 'text-blue-700', bg: 'bg-blue-50' },
-            { label: 'Atrasadas', value: member.tasksLate, color: member.tasksLate > 0 ? 'text-red-600' : 'text-slate-400', bg: member.tasksLate > 0 ? 'bg-red-50' : 'bg-slate-50' },
+            { label: 'Atrasadas', value: member.tasksLate, color: member.tasksLate > 0 ? 'text-red-600' : 'text-slate-400 dark:text-slate-500', bg: member.tasksLate > 0 ? 'bg-red-50' : 'bg-slate-50 dark:bg-slate-800/50' },
           ].map(stat => (
             <div key={stat.label} className={cn('rounded-xl p-4 text-center', stat.bg)}>
               <p className={cn('text-2xl font-black', stat.color)}>{stat.value}</p>
-              <p className="text-[11px] text-slate-500 mt-1">{stat.label}</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 dark:text-slate-500 mt-1">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Active tasks */}
         <div>
-          <h4 className="text-xs font-bold uppercase text-slate-400 tracking-widest mb-3">Tarefas Ativas</h4>
+          <h4 className="text-xs font-bold uppercase text-slate-400 dark:text-slate-500 tracking-widest mb-3">Tarefas Ativas</h4>
           <div className="space-y-2">
             {member.activeTasks.map(task => {
               const stage = STAGE_CONFIG[task.stage];
               const priority = PRIORITY_CONFIG[task.priority];
               return (
-                <div key={task.id} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors">
+                <div key={task.id} className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl hover:bg-slate-100 dark:bg-slate-800 transition-colors">
                   <span className={cn('w-2 h-2 rounded-full flex-shrink-0', priority.dot)} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-900 truncate">{task.title}</p>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{task.title}</p>
                     <div className="flex items-center gap-2 mt-0.5">
                       <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: task.labelColor + '20', color: task.labelColor }}>{task.label}</span>
-                      <span className="flex items-center gap-1 text-[10px] text-slate-500"><Calendar className="w-3 h-3" />{task.dueDate}</span>
+                      <span className="flex items-center gap-1 text-[10px] text-slate-500 dark:text-slate-400 dark:text-slate-500"><Calendar className="w-3 h-3" />{task.dueDate}</span>
                     </div>
                   </div>
                   <span className={cn('text-[10px] font-bold px-2 py-1 rounded-full flex-shrink-0', stage.color)}>{stage.label}</span>
@@ -352,15 +350,15 @@ function MemberDetail({ member }: { member: Member }) {
               );
             })}
             {member.activeTasks.length === 0 && (
-              <p className="text-sm text-slate-400 text-center py-4">Nenhuma tarefa ativa no momento.</p>
+              <p className="text-sm text-slate-400 dark:text-slate-500 text-center py-4">Nenhuma tarefa ativa no momento.</p>
             )}
           </div>
         </div>
 
         {/* Weekly activity chart */}
         <div>
-          <h4 className="text-xs font-bold uppercase text-slate-400 tracking-widest mb-3">Atividade — Últimos 7 dias</h4>
-          <div className="bg-slate-50 rounded-xl p-4">
+          <h4 className="text-xs font-bold uppercase text-slate-400 dark:text-slate-500 tracking-widest mb-3">Atividade — Últimos 7 dias</h4>
+          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4">
             <div className="flex items-end gap-2 h-16">
               {member.weekActivity.map((v, i) => {
                 const max = Math.max(...member.weekActivity, 1);
@@ -377,7 +375,7 @@ function MemberDetail({ member }: { member: Member }) {
                         style={{ marginTop: 'auto' }}
                       />
                     </div>
-                    <span className="text-[9px] text-slate-400">{days[i]}</span>
+                    <span className="text-[9px] text-slate-400 dark:text-slate-500">{days[i]}</span>
                   </div>
                 );
               })}
@@ -408,125 +406,114 @@ export default function TeamPage() {
   const onlineCount = MEMBERS.filter(m => m.status === 'online').length;
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-28">
-      <div className="flex flex-col min-w-0">
-        <TopBar />
-
-        <main className="flex-1 p-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
-
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-                  <Users className="w-5 h-5" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Equipe</h1>
-                  <p className="text-slate-500 text-sm">Visão geral da produtividade e tarefas da equipe.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* KPI Strip */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {[
-                { label: 'Membros online', value: onlineCount, total: MEMBERS.length, icon: Users, color: 'from-indigo-500 to-violet-600' },
-                { label: 'Tarefas totais', value: totalTasks, icon: BarChart3, color: 'from-blue-500 to-cyan-600' },
-                { label: 'Concluídas', value: doneTasks, icon: CheckCircle2, color: 'from-emerald-500 to-teal-600' },
-                { label: 'Atrasadas', value: lateTasks, icon: AlertCircle, color: 'from-red-500 to-rose-600' },
-              ].map(kpi => {
-                const Icon = kpi.icon;
-                return (
-                  <div key={kpi.label} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex items-center gap-4">
-                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${kpi.color} flex items-center justify-center flex-shrink-0`}>
-                      <Icon className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-black text-slate-900 leading-none">
-                        {kpi.value}{kpi.total ? <span className="text-base font-semibold text-slate-400">/{kpi.total}</span> : ''}
-                      </p>
-                      <p className="text-xs text-slate-500 mt-0.5">{kpi.label}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Filters */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="relative flex-1 max-w-xs">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Buscar membro..."
-                  className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-800"
-                />
-              </div>
-              <div className="flex gap-1.5 bg-white border border-slate-200 rounded-xl p-1">
-                {[
-                  { id: 'all',     label: 'Todos' },
-                  { id: 'online',  label: 'Online' },
-                  { id: 'away',    label: 'Ausente' },
-                  { id: 'offline', label: 'Offline' },
-                ].map(f => (
-                  <button
-                    key={f.id}
-                    onClick={() => setStatusFilter(f.id as any)}
-                    className={cn(
-                      'px-3 py-1.5 rounded-lg text-xs font-bold transition-all',
-                      statusFilter === f.id ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-50'
-                    )}
-                  >
-                    {f.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Main content: cards + detail */}
-            <div className="flex gap-6">
-              {/* Member Cards Grid */}
-              <div className={cn('grid gap-4 content-start', selectedMember ? 'grid-cols-1 lg:grid-cols-2 w-full lg:w-auto flex-shrink-0' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 w-full')}>
-                {filtered.map(member => (
-                  <MemberCard
-                    key={member.id}
-                    member={member}
-                    isSelected={selectedMember?.id === member.id}
-                    onClick={() => setSelectedMember(prev => prev?.id === member.id ? null : member)}
-                  />
-                ))}
-                {filtered.length === 0 && (
-                  <div className="col-span-full text-center py-12 text-slate-400 text-sm">
-                    Nenhum membro encontrado.
-                  </div>
-                )}
-              </div>
-
-              {/* Detail Panel */}
-              <AnimatePresence>
-                {selectedMember && (
-                  <div className="flex-1 min-w-0 hidden lg:block">
-                    <MemberDetail member={selectedMember} />
-                  </div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Mobile detail panel */}
-            <AnimatePresence>
-              {selectedMember && (
-                <div className="mt-6 lg:hidden">
-                  <MemberDetail member={selectedMember} />
-                </div>
-              )}
-            </AnimatePresence>
-
+    <>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+            <Users className="w-5 h-5" />
           </div>
-        </main>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Equipe</h1>
+            <p className="text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm">Visão geral da produtividade e tarefas da equipe.</p>
+          </div>
+        </div>
       </div>
-      <Dock />
-    </div>
+
+      {/* KPI Strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {[
+          { label: 'Membros online', value: onlineCount, total: MEMBERS.length, icon: Users, color: 'from-indigo-500 to-violet-600' },
+          { label: 'Tarefas totais', value: totalTasks, icon: BarChart3, color: 'from-blue-500 to-cyan-600' },
+          { label: 'Concluídas', value: doneTasks, icon: CheckCircle2, color: 'from-emerald-500 to-teal-600' },
+          { label: 'Atrasadas', value: lateTasks, icon: AlertCircle, color: 'from-red-500 to-rose-600' },
+        ].map(kpi => {
+          const Icon = kpi.icon;
+          return (
+            <div key={kpi.label} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 shadow-sm p-5 flex items-center gap-4">
+              <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${kpi.color} flex items-center justify-center flex-shrink-0`}>
+                <Icon className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <p className="text-2xl font-black text-slate-900 dark:text-slate-100 leading-none">
+                  {kpi.value}{kpi.total ? <span className="text-base font-semibold text-slate-400 dark:text-slate-500">/{kpi.total}</span> : ''}
+                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 dark:text-slate-500 mt-0.5">{kpi.label}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Filters */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="relative flex-1 max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar membro..."
+            className="w-full pl-9 pr-4 py-2 text-sm bg-white dark:bg-slate-900 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-slate-200"
+          />
+        </div>
+        <div className="flex gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 rounded-xl p-1">
+          {[
+            { id: 'all',     label: 'Todos' },
+            { id: 'online',  label: 'Online' },
+            { id: 'away',    label: 'Ausente' },
+            { id: 'offline', label: 'Offline' },
+          ].map(f => (
+            <button
+              key={f.id}
+              onClick={() => setStatusFilter(f.id as any)}
+              className={cn(
+                'px-3 py-1.5 rounded-lg text-xs font-bold transition-all',
+                statusFilter === f.id ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:bg-slate-800/50'
+              )}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Main content: cards + detail */}
+      <div className="flex gap-6">
+        {/* Member Cards Grid */}
+        <div className={cn('grid gap-4 content-start', selectedMember ? 'grid-cols-1 lg:grid-cols-2 w-full lg:w-auto flex-shrink-0' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 w-full')}>
+          {filtered.map(member => (
+            <MemberCard
+              key={member.id}
+              member={member}
+              isSelected={selectedMember?.id === member.id}
+              onClick={() => setSelectedMember(prev => prev?.id === member.id ? null : member)}
+            />
+          ))}
+          {filtered.length === 0 && (
+            <div className="col-span-full text-center py-12 text-slate-400 dark:text-slate-500 text-sm">
+              Nenhum membro encontrado.
+            </div>
+          )}
+        </div>
+
+        {/* Detail Panel */}
+        <AnimatePresence>
+          {selectedMember && (
+            <div className="flex-1 min-w-0 hidden lg:block">
+              <MemberDetail member={selectedMember!} />
+            </div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Mobile detail panel */}
+      <AnimatePresence>
+        {selectedMember && (
+          <div className="mt-6 lg:hidden">
+            <MemberDetail member={selectedMember!} />
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Dock } from '@/components/Dock';
-import { TopBar } from '@/components/TopBar';
+
 import { FolderCard, FOLDER_COLORS } from '@/components/projects/FolderCard';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { CreateFolderModal } from '@/components/projects/CreateFolderModal';
@@ -65,27 +64,21 @@ export default function ProjectsPage() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-20">
         <div className="w-8 h-8 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-24">
-      <div className="flex flex-col min-w-0">
-        <TopBar />
-
-        <main className="flex-1 p-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
-
-            {/* ── Breadcrumb Header ──────────────────────────────────────────── */}
-            <div className="flex items-center gap-2 mb-8">
+    <>
+      {/* ── Breadcrumb Header ──────────────────────────────────────────── */}
+      <div className="flex items-center gap-2 mb-8">
               <button
                 onClick={() => { setSelectedFolderId(null); setSelectedProjectId(null); }}
-                className={`flex items-center gap-2 transition-colors ${selectedFolder ? 'text-slate-400 hover:text-slate-700' : 'text-slate-900 '}`}
+                className={`flex items-center gap-2 transition-colors ${selectedFolder ? 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300' : 'text-slate-900 dark:text-slate-100 '}`}
               >
-                <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+                <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20 transition-colors">
                   <Briefcase className="w-5 h-5" />
                 </div>
                 <span className="text-xl font-bold">Projetos</span>
@@ -93,10 +86,10 @@ export default function ProjectsPage() {
 
               {selectedFolder && (
                 <>
-                  <ChevronRight className="w-4 h-4 text-slate-300" />
+                  <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600" />
                   <button
                     onClick={() => setSelectedProjectId(null)}
-                    className={`text-xl font-bold transition-colors ${selectedProject ? 'text-slate-400 hover:text-slate-700' : 'text-slate-900'}`}
+                    className={`text-xl font-bold transition-colors ${selectedProject ? 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300' : 'text-slate-900 dark:text-slate-100'}`}
                   >
                     {selectedFolder.name}
                   </button>
@@ -105,8 +98,8 @@ export default function ProjectsPage() {
 
               {selectedProject && (
                 <>
-                  <ChevronRight className="w-4 h-4 text-slate-300" />
-                  <span className="text-xl font-bold text-slate-900">{selectedProject.name}</span>
+                  <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600" />
+                  <span className="text-xl font-bold text-slate-900 dark:text-slate-100">{selectedProject.name}</span>
                 </>
               )}
             </div>
@@ -114,14 +107,14 @@ export default function ProjectsPage() {
             {/* ── Project Detail View ────────────────────────────────────────── */}
             {selectedProject && (
               <div className="max-w-2xl">
-                <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-8 transition-colors">
                   <div className="flex items-start justify-between mb-6">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
                         <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                          selectedProject.status === 'Ativo' ? 'bg-emerald-100 text-emerald-700' :
-                          selectedProject.status === 'Pausado' ? 'bg-amber-100 text-amber-700' :
-                          'bg-slate-100 text-slate-500'
+                          selectedProject.status === 'Ativo' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' :
+                          selectedProject.status === 'Pausado' ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400' :
+                          'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
                         }`}>{selectedProject.status}</span>
                         {selectedProject.dueDate && (
                           <span className="text-xs text-slate-400">
@@ -149,7 +142,7 @@ export default function ProjectsPage() {
                           <span className="text-xs text-slate-500">{done} / {selectedProject.tasks.length} tarefas concluídas</span>
                           <span className="text-xs font-bold text-slate-700">{pct}%</span>
                         </div>
-                        <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden transition-colors">
                           <div className="h-full bg-indigo-500 rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
                         </div>
                       </div>
@@ -168,7 +161,7 @@ export default function ProjectsPage() {
                           >
                             {task.completed ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5" />}
                           </button>
-                          <span className={`text-sm flex-1 transition-colors ${task.completed ? 'line-through text-slate-400' : 'text-slate-800'}`}>
+                           <span className={`text-sm flex-1 transition-colors ${task.completed ? 'line-through text-slate-400 dark:text-slate-600' : 'text-slate-800 dark:text-slate-200'}`}>
                             {task.title}
                           </span>
                           <button
@@ -182,18 +175,18 @@ export default function ProjectsPage() {
                     </div>
 
                     <div className="flex gap-2">
-                      <input
+                        <input
                         type="text"
                         value={newTaskInput}
                         onChange={(e) => setNewTaskInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
                         placeholder="Adicionar tarefa..."
-                        className="flex-1 px-3 py-2 text-sm bg-slate-50 border border-dashed border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300 text-slate-800 placeholder:text-slate-400"
+                        className="flex-1 px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800/50 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300 dark:focus:border-indigo-500/50 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 transition-all"
                       />
                       <button
                         onClick={handleAddTask}
                         disabled={!newTaskInput.trim()}
-                        className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-colors disabled:opacity-50"
+                        className="px-3 py-2 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors disabled:opacity-50"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
@@ -215,7 +208,7 @@ export default function ProjectsPage() {
                   </div>
                   <button
                     onClick={() => { setEditingProject(null); setIsProjectModalOpen(true); }}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 dark:shadow-indigo-900/20"
                   >
                     <Plus className="w-4 h-4" /> Novo Projeto
                   </button>
@@ -223,11 +216,11 @@ export default function ProjectsPage() {
 
                 {selectedFolder.projectIds.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4">
-                      <Briefcase className="w-8 h-8 text-slate-300" />
+                    <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-4 transition-colors">
+                      <Briefcase className="w-8 h-8 text-slate-300 dark:text-slate-600" />
                     </div>
-                    <p className="text-slate-500 font-medium mb-1">Nenhum projeto ainda</p>
-                    <p className="text-slate-400 text-sm">Crie o primeiro projeto desta pasta.</p>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium mb-1">Nenhum projeto ainda</p>
+                    <p className="text-slate-400 dark:text-slate-600 text-sm">Crie o primeiro projeto desta pasta.</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -260,7 +253,7 @@ export default function ProjectsPage() {
                   <p className="text-slate-500 text-sm">Organize seus projetos de marketing em pastas temáticas.</p>
                   <button
                     onClick={() => { setEditingFolder(null); setIsFolderModalOpen(true); }}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 dark:shadow-indigo-900/20"
                   >
                     <Plus className="w-4 h-4" /> Nova Pasta
                   </button>
@@ -288,12 +281,6 @@ export default function ProjectsPage() {
                 </div>
               </>
             )}
-          </div>
-        </main>
-      </div>
-
-      <Dock />
-
       <CreateFolderModal
         isOpen={isFolderModalOpen}
         existing={editingFolder}
@@ -308,6 +295,6 @@ export default function ProjectsPage() {
         onClose={() => { setIsProjectModalOpen(false); setEditingProject(null); }}
         onSave={handleSaveProject}
       />
-    </div>
+    </>
   );
 }

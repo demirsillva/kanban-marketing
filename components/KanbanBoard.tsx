@@ -12,6 +12,7 @@ import { ConfirmationModal } from './ConfirmationModal';
 import { NewColumnModal } from './NewColumnModal';
 import { triggerSingleConfetti } from '@/lib/confetti';
 import { cn } from '@/lib/utils';
+import { Button } from './ui/Button';
 
 export function KanbanBoard() {
   const { 
@@ -128,64 +129,64 @@ export function KanbanBoard() {
     <div className="flex flex-col h-full">
       {/* Metrics Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Tarefas Ativas</p>
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
+          <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Tarefas Ativas</p>
           <div className="flex items-end justify-between">
-            <h3 className="text-3xl font-bold text-slate-900">{activeTasksCount}</h3>
-            <span className="text-indigo-600 text-xs font-semibold bg-indigo-50 px-2 py-1 rounded-md">Em andamento</span>
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-slate-100">{activeTasksCount}</h3>
+            <span className="text-indigo-600 dark:text-indigo-400 text-xs font-semibold bg-indigo-50 dark:bg-indigo-500/10 px-2 py-1 rounded-md transition-colors">Em andamento</span>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Em Revisão</p>
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
+          <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Em Revisão</p>
           <div className="flex items-end justify-between">
-            <h3 className="text-3xl font-bold text-slate-900">{reviewTasksCount}</h3>
-            <span className="text-amber-600 text-xs font-semibold bg-amber-50 px-2 py-1 rounded-md">Aguardando feedback</span>
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-slate-100">{reviewTasksCount}</h3>
+            <span className="text-amber-600 dark:text-amber-400 text-xs font-semibold bg-amber-50 dark:bg-amber-500/10 px-2 py-1 rounded-md transition-colors">Aguardando feedback</span>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Concluídas (Mês)</p>
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
+          <p className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Concluídas (Mês)</p>
           <div className="flex items-end justify-between">
-            <h3 className="text-3xl font-bold text-slate-900">{completedTasksCount}</h3>
-            <span className="text-emerald-600 text-xs font-semibold bg-emerald-50 px-2 py-1 rounded-md">Meta: 85%</span>
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-slate-100">{completedTasksCount}</h3>
+            <span className="text-emerald-600 dark:text-emerald-400 text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-md transition-colors">Meta: 85%</span>
           </div>
         </div>
       </div>
 
-      {/* Filters & Actions */}
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
             <input
               type="text"
               placeholder="Filtrar tarefas..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 w-64"
+              className="pl-10 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 w-64 transition-colors"
             />
           </div>
           <select 
             value={filterPriority}
             onChange={(e) => setFilterPriority(e.target.value)}
-            className="px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-600"
+            className="px-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-600 dark:text-slate-400 transition-colors"
           >
             <option value="Todos">Todas Prioridades</option>
             <option value="Baixa">Baixa</option>
             <option value="Média">Média</option>
             <option value="Alta">Alta</option>
-            <option value="Crítica">Crítica</option>
+            <option value="Urgente">Urgente</option>
           </select>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button 
+        <div className="flex items-center gap-3">
+          <Button 
+            variant="secondary"
             onClick={handleAddColumn}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+            leftIcon={<LayoutGrid className="w-4 h-4" />}
           >
-            <LayoutGrid className="w-4 h-4" />
             Nova Coluna
-          </button>
-          <button 
+          </Button>
+          <Button 
+            variant="primary"
             onClick={() => {
               const firstColId = board.columnOrder[0];
               if (firstColId) {
@@ -194,11 +195,10 @@ export function KanbanBoard() {
                 alert('Crie uma coluna primeiro!');
               }
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200"
+            leftIcon={<Plus className="w-4 h-4" />}
           >
-            <Plus className="w-4 h-4" />
             Nova Tarefa
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -314,7 +314,7 @@ export function KanbanBoard() {
       <NewColumnModal
         isOpen={isNewColumnModalOpen}
         onClose={() => setIsNewColumnModalOpen(false)}
-        onConfirm={(title) => addColumn(title)}
+        onConfirm={(title, color) => addColumn(title, color)}
       />
     </div>
   );

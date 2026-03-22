@@ -62,7 +62,7 @@ export function EditableText({ value, onSave, className, inputClassName, multili
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
         className={cn(
-          "w-full bg-white border border-indigo-300 rounded px-1 py-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm resize-none",
+          "w-full bg-white dark:bg-slate-900 border border-indigo-300 rounded px-1 py-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm resize-none",
           inputClassName
         )}
         rows={3}
@@ -75,7 +75,7 @@ export function EditableText({ value, onSave, className, inputClassName, multili
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
         className={cn(
-          "w-full bg-white border border-indigo-300 rounded px-1 py-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm font-semibold",
+          "w-full bg-white dark:bg-slate-900 border border-indigo-300 rounded px-1 py-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm font-semibold",
           inputClassName
         )}
       />
@@ -89,7 +89,7 @@ export function EditableText({ value, onSave, className, inputClassName, multili
         setIsEditing(true);
       }}
       className={cn(
-        "cursor-text hover:bg-slate-50 rounded px-1 -mx-1 transition-colors min-h-[1.25rem]",
+        "cursor-text hover:bg-slate-50 dark:bg-slate-800/50 rounded px-1 -mx-1 transition-colors min-h-[1.25rem]",
         className
       )}
     >

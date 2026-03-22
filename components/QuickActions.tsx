@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { MoreHorizontal, Trash2, Edit2, Copy, Archive } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Button } from './ui/Button';
 
 interface QuickActionsProps {
   onDelete: () => void;
@@ -27,15 +28,17 @@ export function QuickActions({ onDelete, onEdit, onDuplicate, onArchive }: Quick
 
   return (
     <div className="relative" ref={menuRef}>
-      <button
+      <Button
+        variant="ghost"
+        size="icon"
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+        className="opacity-0 group-hover:opacity-100"
       >
         <MoreHorizontal className="w-4 h-4" />
-      </button>
+      </Button>
 
       <AnimatePresence>
         {isOpen && (
@@ -43,7 +46,7 @@ export function QuickActions({ onDelete, onEdit, onDuplicate, onArchive }: Quick
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 overflow-hidden"
+            className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 overflow-hidden"
           >
             <button
               onClick={(e) => {
@@ -51,7 +54,7 @@ export function QuickActions({ onDelete, onEdit, onDuplicate, onArchive }: Quick
                 onEdit();
                 setIsOpen(false);
               }}
-              className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-colors"
+              className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:bg-slate-800/50 transition-colors"
             >
               <Edit2 className="w-4 h-4" />
               Editar detalhes
@@ -62,7 +65,7 @@ export function QuickActions({ onDelete, onEdit, onDuplicate, onArchive }: Quick
                 onDuplicate();
                 setIsOpen(false);
               }}
-              className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-colors"
+              className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:bg-slate-800/50 transition-colors"
             >
               <Copy className="w-4 h-4" />
               Duplicar
@@ -73,12 +76,12 @@ export function QuickActions({ onDelete, onEdit, onDuplicate, onArchive }: Quick
                 onArchive();
                 setIsOpen(false);
               }}
-              className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-colors"
+              className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 dark:text-slate-500 hover:bg-slate-50 dark:bg-slate-800/50 transition-colors"
             >
               <Archive className="w-4 h-4" />
               Arquivar
             </button>
-            <div className="h-px bg-slate-100 my-1.5" />
+            <div className="h-px bg-slate-100 dark:bg-slate-800 my-1.5" />
             <button
               onClick={(e) => {
                 e.stopPropagation();

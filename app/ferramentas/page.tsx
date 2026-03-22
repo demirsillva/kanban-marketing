@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Dock } from '@/components/Dock';
-import { TopBar } from '@/components/TopBar';
 import {
   PenLine, Film, Instagram, Lightbulb, Search,
   Sparkles, RefreshCw, Copy, CheckCheck, ChevronRight,
@@ -174,14 +172,14 @@ function ToolPanel({ tool, onBack }: { tool: Tool; onBack: () => void }) {
     >
       <button
         onClick={onBack}
-        className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 mb-6 transition-colors"
+        className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:text-slate-200 mb-6 transition-colors"
       >
         ← Ferramentas
       </button>
 
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
         <div className={`bg-gradient-to-r ${tool.bgGradient} p-6 flex items-center gap-4`}>
-          <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-white dark:bg-slate-900/20 rounded-xl flex items-center justify-center">
             <tool.icon className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -194,7 +192,7 @@ function ToolPanel({ tool, onBack }: { tool: Tool; onBack: () => void }) {
           <div className="grid grid-cols-1 gap-3">
             {tool.fields.map(field => (
               <div key={field.id}>
-                <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider mb-1 block">
+                <label className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider mb-1 block">
                   {field.label}
                 </label>
                 {field.type === 'textarea' ? (
@@ -203,13 +201,13 @@ function ToolPanel({ tool, onBack }: { tool: Tool; onBack: () => void }) {
                     placeholder={field.placeholder}
                     value={inputs[field.id] || ''}
                     onChange={(e) => setInputs(prev => ({ ...prev, [field.id]: e.target.value }))}
-                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 ${colorSet.ring} resize-none text-slate-800 placeholder:text-slate-400`}
+                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 ${colorSet.ring} resize-none text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 transition-colors`}
                   />
                 ) : field.type === 'select' ? (
                   <select
                     value={inputs[field.id] || (field.options?.[0] ?? '')}
                     onChange={(e) => setInputs(prev => ({ ...prev, [field.id]: e.target.value }))}
-                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 ${colorSet.ring} text-slate-700`}
+                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 ${colorSet.ring} text-slate-700 dark:text-slate-300 transition-colors`}
                   >
                     {field.options?.map(opt => <option key={opt}>{opt}</option>)}
                   </select>
@@ -219,7 +217,7 @@ function ToolPanel({ tool, onBack }: { tool: Tool; onBack: () => void }) {
                     placeholder={field.placeholder}
                     value={inputs[field.id] || ''}
                     onChange={(e) => setInputs(prev => ({ ...prev, [field.id]: e.target.value }))}
-                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 ${colorSet.ring} text-slate-800 placeholder:text-slate-400`}
+                    className={`w-full px-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 ${colorSet.ring} text-slate-800 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 transition-colors`}
                   />
                 )}
               </div>
@@ -243,16 +241,16 @@ function ToolPanel({ tool, onBack }: { tool: Tool; onBack: () => void }) {
                 ref={outputRef}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`${colorSet.bg} rounded-xl p-4`}
+                className={`${colorSet.bg} dark:bg-slate-800/40 rounded-xl p-4 transition-colors`}
               >
                 <div
-                  className="text-sm text-slate-700 leading-relaxed"
+                  className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: renderMarkdown(output) }}
                 />
                 <div className="flex gap-2 mt-3">
                   <button
                     onClick={handleCopy}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-white rounded-lg border border-slate-200 text-slate-600 hover:border-slate-300 transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 transition-all"
                   >
                     {copied
                       ? <><CheckCheck className="w-3.5 h-3.5 text-emerald-500" /> Copiado!</>
@@ -261,7 +259,7 @@ function ToolPanel({ tool, onBack }: { tool: Tool; onBack: () => void }) {
                   </button>
                   <button
                     onClick={handleGenerate}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-white rounded-lg border border-slate-200 text-slate-600 hover:border-slate-300 transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 transition-all"
                   >
                     <RefreshCw className="w-3.5 h-3.5" /> Gerar outra versão
                   </button>
@@ -279,58 +277,49 @@ export default function FerramentasPage() {
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-28">
-      <div className="flex flex-col min-w-0">
-        <TopBar />
-        <main className="flex-1 p-8 overflow-y-auto">
-          <div className="max-w-7xl mx-auto">
-
-            {/* Header */}
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Ferramentas de IA</h1>
-                <p className="text-slate-500 text-sm">Crie conteúdo de marketing com inteligência artificial.</p>
-              </div>
-            </div>
-
-            {/* Tool selected → show panel */}
-            {selectedTool ? (
-              <ToolPanel tool={selectedTool} onBack={() => setSelectedTool(null)} />
-            ) : (
-              /* Tool cards grid */
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-                {TOOLS.map((tool) => {
-                  const colorSet = COLORS[tool.color];
-                  return (
-                    <motion.button
-                      key={tool.id}
-                      whileHover={{ scale: 1.03, y: -3 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => setSelectedTool(tool)}
-                      className="text-left bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all overflow-hidden group"
-                    >
-                      <div className={`bg-gradient-to-br ${tool.bgGradient} p-6 flex items-center justify-center`}>
-                        <tool.icon className="w-9 h-9 text-white" />
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-bold text-slate-900 text-sm mb-1.5 leading-tight">{tool.name}</h3>
-                        <p className="text-xs text-slate-500 leading-relaxed mb-3">{tool.description}</p>
-                        <div className={`flex items-center gap-1 text-xs font-bold ${colorSet.text}`}>
-                          Abrir <ChevronRight className="w-3.5 h-3.5" />
-                        </div>
-                      </div>
-                    </motion.button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </main>
+    <>
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-8">
+        <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20 transition-colors">
+          <Sparkles className="w-5 h-5" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Ferramentas de IA</h1>
+          <p className="text-slate-500 dark:text-slate-400 dark:text-slate-500 text-sm">Crie conteúdo de marketing com inteligência artificial.</p>
+        </div>
       </div>
-      <Dock />
-    </div>
+
+      {/* Tool selected → show panel */}
+      {selectedTool ? (
+        <ToolPanel tool={selectedTool} onBack={() => setSelectedTool(null)} />
+      ) : (
+        /* Tool cards grid */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+          {TOOLS.map((tool) => {
+            const colorSet = COLORS[tool.color];
+            return (
+              <motion.button
+                key={tool.id}
+                whileHover={{ scale: 1.03, y: -3 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setSelectedTool(tool)}
+                className="text-left bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all overflow-hidden group"
+              >
+                <div className={`bg-gradient-to-br ${tool.bgGradient} p-6 flex items-center justify-center`}>
+                  <tool.icon className="w-9 h-9 text-white" />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1.5 leading-tight">{tool.name}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 dark:text-slate-500 leading-relaxed mb-3">{tool.description}</p>
+                  <div className={`flex items-center gap-1 text-xs font-bold ${colorSet.text}`}>
+                    Abrir <ChevronRight className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 }

@@ -56,7 +56,11 @@ function DockIcon({
     [-150, 0, 150], 
     [settings.baseSize, settings.baseSize * settings.magnification, settings.baseSize]
   );
-  const width = useSpring(widthSync, { mass: 0.1, stiffness: 250, damping: 15 });
+  const width = useSpring(widthSync, { 
+    mass: 0.1, 
+    stiffness: 150, 
+    damping: 12 
+  });
 
   return (
     <motion.div
@@ -64,14 +68,13 @@ function DockIcon({
       style={{ width }}
       className={cn(
         "aspect-square rounded-2xl flex items-center justify-center relative group transition-colors cursor-grab active:cursor-grabbing",
-        active ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200" : "bg-white/80 text-slate-600 hover:bg-white hover:text-indigo-600 border border-white/20 shadow-sm"
+        active ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-indigo-900/20" : "bg-white/80 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 border border-white/20 dark:border-slate-800/50 shadow-sm"
       )}
     >
       <Icon className="w-1/2 h-1/2" />
       
-      {/* Tooltip */}
       {settings.showLabels && (
-        <div className="absolute -top-12 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+        <div className="absolute -top-12 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
           {label}
         </div>
       )}
@@ -129,10 +132,10 @@ export function Dock() {
   // We return a placeholder with the same structure but static values for SSR
   if (!mounted) {
     return (
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-end gap-4 opacity-0">
-        <div className="flex items-end gap-3 px-4 py-3 bg-white/40 backdrop-blur-xl border border-white/40 rounded-[32px] shadow-2xl">
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-end gap-4 opacity-0 transition-colors">
+        <div className="flex items-end gap-3 px-4 py-3 bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl border border-white/40 dark:border-slate-800/40 rounded-[32px] shadow-2xl">
           {initialNavItems.map((item) => (
-            <div key={item.id} style={{ width: 48 }} className="aspect-square rounded-2xl bg-white/80 border border-white/20" />
+            <div key={item.id} style={{ width: 48 }} className="aspect-square rounded-2xl bg-white/80 dark:bg-slate-800/50 border border-white/20 dark:border-slate-700/30" />
           ))}
         </div>
       </div>
@@ -140,13 +143,16 @@ export function Dock() {
   }
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-colors">
       <div 
-        onMouseMove={(e) => mouseX.set(e.pageX)}
-        onMouseLeave={() => mouseX.set(Infinity)}
-        className="flex items-center gap-3 px-4 py-3 bg-white/40 backdrop-blur-xl border border-white/40 rounded-[32px] shadow-2xl"
+        className="flex items-center gap-3 px-4 py-3 bg-white/40 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-slate-800/60 rounded-[32px] shadow-2xl"
       >
-        <Reorder.Group axis="x" values={items} onReorder={setItems} className="flex items-center gap-3">
+        <div 
+          onMouseMove={(e) => mouseX.set(e.pageX)}
+          onMouseLeave={() => mouseX.set(Infinity)}
+          className="flex items-center gap-3"
+        >
+          <Reorder.Group axis="x" values={items} onReorder={setItems} className="flex items-center gap-3">
           {items.map((item: NavItem) => (
             <Reorder.Item key={item.id} value={item}>
               <Link href={item.href}>
@@ -159,10 +165,11 @@ export function Dock() {
               </Link>
             </Reorder.Item>
           ))}
-        </Reorder.Group>
+          </Reorder.Group>
+        </div>
 
         {/* Separator */}
-        <div className="w-px h-8 bg-white/20 mx-1" />
+        <div className="w-px h-8 bg-white/20 dark:bg-slate-700/50 mx-1" />
 
         {/* Settings Toggle */}
         <div className="relative">
@@ -170,7 +177,7 @@ export function Dock() {
             onClick={() => setIsSettingsOpen(!isSettingsOpen)}
             className={cn(
               "w-10 h-10 rounded-2xl flex items-center justify-center transition-all shadow-sm border",
-              isSettingsOpen ? "bg-indigo-600 text-white border-indigo-500 rotate-90" : "bg-white/80 text-slate-600 border-white/20 hover:bg-white hover:text-indigo-600"
+              isSettingsOpen ? "bg-indigo-600 text-white border-indigo-500 rotate-90" : "bg-white/80 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 border-white/20 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400"
             )}
           >
             <Sliders className="w-4 h-4" />
@@ -182,9 +189,9 @@ export function Dock() {
                 initial={{ opacity: 0, scale: 0.9, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                className="absolute bottom-16 right-0 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 p-4"
+                className="absolute bottom-16 right-0 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-800 p-4 transition-colors"
               >
-                <h3 className="text-sm font-bold text-slate-900 mb-4">Ajustes da Dock</h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-4">Ajustes da Dock</h3>
                 
                 <div className="space-y-4">
                   <div>

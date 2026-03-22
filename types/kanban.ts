@@ -1,4 +1,4 @@
-export type Priority = 'Baixa' | 'Média' | 'Alta' | 'Crítica';
+export type Priority = 'Baixa' | 'Média' | 'Alta' | 'Urgente';
 export type FunnelStage = 'Topo' | 'Meio' | 'Fundo';
 export type TaskType = 'Campanha de Tráfego' | 'Post para Instagram' | 'Landing Page' | 'E-mail Marketing' | 'Conteúdo Blog' | 'Vídeo YouTube';
 export type Channel = 'Facebook Ads' | 'Google Ads' | 'Instagram' | 'YouTube' | 'WhatsApp' | 'E-mail' | 'LinkedIn' | 'TikTok';
@@ -35,6 +35,7 @@ export interface Column {
   id: string;
   title: string;
   cardIds: string[];
+  color?: string;
 }
 
 export interface Board {
